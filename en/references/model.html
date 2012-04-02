@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <title>Panada PHP Framework 1.0.0 Documentation - Model</title>
+    <link rel="stylesheet" href="../../style.css" type="text/css" media="screen" />
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+	    <a target="_blank" href="http://panadaframework.com/"><img src="../../images/logo.png" height="21" border="0" /></a>
+	</div>
+        <div class="menu">
+            <form action="http://www.google.com/search" method="get">
+	    <input type="hidden" value="panadaframework.com/documentation/" id="as_sitesearch" name="as_sitesearch">
+            <input class="search-input" type="text" name="q" /><button class="search-button" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    <div class="subheader">
+        <h1>Panada Framework 1.0.0 Documentation</h1>
+    </div>
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="navigation">
+                <ul>
+                    <li>
+                        <a href="../index.html">General</a>
+                        <ul>
+                            <li><a href="../index.html#about">About Panada</a></li>
+                            <li><a href="../index.html#feature">Features</a></li>
+							<li><a href="../index.html#requirement">Requirement</a></li>
+                            <li><a href="../index.html#license">License</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="../config.html">Configuration</a>
+                        <ul>
+                            <li><a href="../config.html#general">Basic</a></li>
+                            <li><a href="../config.html#additional_config">Additional</a></li>
+                            <li><a href="../config.html#webserver">Webserver</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        Reference
+                        <ul>
+                            <li><a href="../references/controller.html">Controller</a></li>
+                            <li><a href="../references/model.html">Model</a></li>
+                            <li><a href="../references/view.html">View</a></li>
+                            <li><a href="../references/library.html">Library</a></li>
+                            <li><a href="../references/autoloader.html">Auto Loader</a></li>
+                            <li><a href="../references/global_method.html">Global Method and Properties</a></li>
+                            <li><a href="../references/module.html">Module</a></li>
+                            <li><a href="vendor.html">Vendor</a></li>
+			    <li><a href="../references/upgrade.html">Upgrade</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="index.html">Resources</a>
+                        <ul>
+                            <li><a href="database/index.html">Database</a></li>
+                            <li><a href="cache/index.html">Cache</a></li>
+                            <li><a href="session.html">Session</a></li>
+                            <li><a href="pagination.html">Pagination</a></li>
+                            <li><a href="email.html">Email</a></li>
+                            <li><a href="encryption.html">Encryption</a></li>
+                            <li><a href="upload.html">Upload</a></li>
+                            <li><a href="image.html">Image</a></li>
+                            <li><a href="request.html">Request</a></li>
+                            <li><a href="rest.html">RESTfull</a></li>
+			    <li><a href="tools.html">Tools</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="../contribution.html">Contribution</a></li>
+                    <li><a href="../credit.html">Credit</a></li>
+                </ul>
+	    </div>
+	    
+        </div>
+        <div class="content">
+            <div class="lead">
+                <h2>Model</h2>
+                <p>Model adalah sebuah class yang tugasnya berkaitan langsung dengan penanganan data, baik itu dari database, atau sistem penyimpanan yang lain.</p>
+            </div>
+            
+            <div class="main">
+                <h3>Membuat Model</h3>
+                <p>Untuk membuat sebuah class model, tambahkan file baru dan letakan di dalam folder <strong>app/Models/</strong>, misalnya <strong>Users.php</strong>.</p>
+                <p>Buat class users di dalam file ini dengan diberi namespace <strong>"Models"</strong>, contohnya:</p>
+
+<textarea rows="12" cols="50" class="textarea">
+&lt;?php
+namespace Models;
+
+class Users {
+    
+    public function __construct(){
+        
+    }
+}
+</textarea>
+            </div>
+            
+        
+            <div class="main">
+                <h3>Load Library di dalam Model</h3>
+		<p>Jika Anda akan me-load library atau class lain di dalam model ini, ada dua cara yang bisa dilakukan. Pertama, jika resource dari
+		class atau library tersebut ingin digunakan oleh semua method yang ada di dalam class model, maka pengambilan dan penginisialisasian bisa dilakukan di
+		method <b>__construct</b>. Namun, jika resource hanya ingin digunakan pada salah satu method saja, maka inisialisasi dan pemanggilan bisa
+		dilakukan di dalam method yang bersangkutan.</p>
+		
+                <p>Salah satu hal yang paling umum dilakukan di dalam sebuah class model adalah me-load resource database. Untuk melakukan ini berikut adalah contohnya:</p>
+		
+<textarea rows="12" cols="50" class="textarea">
+&lt;?php
+namespace Models;
+use Resources;
+
+class Users {
+    
+    public function __construct(){
+        
+        $this->db = new Resources\Database;
+    }
+}
+</textarea>
+                
+		
+		<p>Berikutnya, properti <strong>"$this->db"</strong> bisa digunakan di semua method yang ada di dalam class tersebut. Berikut adalah contoh untuk mendapatkan 5 record dari database:</p>
+<textarea rows="18" cols="50" class="textarea">
+&lt;?php
+namespace Models;
+use Resources;
+
+class Users {
+    
+    public function __construct(){
+        
+        $this->db = new Resources\Database;
+    }
+    
+    public function users(){
+        
+        $result = $this->db->results("SELECT * FROM table_name ORDER BY id LIMIT 5");
+    }
+}
+</textarea>
+                <div class="notice"><strong>Catatan:</strong> Selain dengan cara ini, pemanggilan bisa dilakukan dengan cara lain yaitu dengan <a href="autoloader.html">auto loader</a>.</div>
+               
+            </div>
+	    <div id="discussion" class="main">
+		<h3>Diskusi</h3>
+		<div id="disqus_thread"></div>
+	    </div>
+
+        </div>
+          
+    <div class="footer">
+	<span class="right">All Rights Reserved.</span>
+    </div>
+    <script type="text/javascript">
+	var disqus_shortname = 'panada';
+	var disqus_url = 'http://panadaframework.com/documentation/id/references/model.html';
+	var disqus_identifier = disqus_url;
+	(function() {
+	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+    </script>
+</body>
+</html>
